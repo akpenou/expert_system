@@ -1,6 +1,6 @@
 from typing import Union, List, Dict, Optional, Type
-from . import ops
 import logging
+import ops
 
 TreeElem = int
 OKGREEN = '\033[92m'

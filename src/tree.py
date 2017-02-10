@@ -1,6 +1,6 @@
 from typing import Union, List, Dict, Optional, Type
-from pkg.classes import *
-from pkg import parse
+from classes import *
+import parse
 import logging
 import unittest
 import sys
@@ -14,6 +14,14 @@ logging.basicConfig(level = logging.WARNING)
 # TreeElem = Union[Type[Node], Type[Leaf]]
 # regex = ^\!?[A-Z]([\|\+\^]\!?[A-Z])*<?=>\!?[A-Z]([\|\+\^]\!?[A-Z])*$
 TreeElem = int
+
+def make_update(value: bool, keys: str, symbols):
+    keys = keys.split(' ')
+    for key in keys.strip().split(' '):
+        if key in symbols:
+            symbols[key].update(value)
+        else:
+            print('{:s} is not a valid symbol'.format(key))
 
 def print_rules(rules: List[str]):
     """ Print all the rules.
@@ -78,6 +86,11 @@ def print_forest(expr_forest):
     for tree in expr_forest:
         print(tree)
 
+def reset_symbols():
+    symbols = dict()
+    for letter in map(chr, range(ord('A'), ord('Z') + 1)):
+        symbols[letter] = Symbol(letter)
+
 
 def repl(symbols: Symbol):
     """ The core function of the repl.
@@ -103,14 +116,16 @@ def repl(symbols: Symbol):
             solve(expr_forest)
         elif txt_in in ['print res']:
             print_forest(expr_forest)
+        elif txt_in.startswith('True ') or txt_in.startswith('False '):
+            value = txt_in.startswith('True ')
+            make_update(
+        elif txt_in in ['re
         else:
             print('I don\'t understand the command')
 
 
 if __name__ == '__main__':
-    symbols = dict()
-    for letter in map(chr, range(ord('A'), ord('Z') + 1)):
-        symbols[letter] = Symbol(letter)
+    symbols = symbols
     repl(symbols)
     # expression = lexer('A + B | C')
     # expression = lexer('A ^ B + C')

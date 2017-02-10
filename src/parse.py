@@ -1,5 +1,5 @@
 from typing import Union, List, Dict, Optional, Type
-from .classes import *
+from classes import *
 import logging
 
 TreeElem = int

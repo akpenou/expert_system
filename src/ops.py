@@ -1,6 +1,6 @@
 from typing import Union, List, Dict, Optional, Type
-import logging
 import unittest
+import logging
 import sys
 import os
 
