@@ -37,7 +37,7 @@ def solve_imply(answer: bool, left: TreeElem, right: TreeElem):
         return the comupation if it's possible esle none
     """
     if not left.default() and left.value():
-        right.update(True)
+        right.solve(True)
 
 
 def eval_equ(left: TreeElem, right: TreeElem) -> Optional[bool]:
@@ -68,9 +68,9 @@ def solve_equ(answer: bool, left: TreeElem, right: TreeElem):
     """
     logging.debug('solve_equ {}'.format(answer))
     if not left.default():
-        right.update(left.value())
+        right.solve(left.value())
     if not right.default():
-        left.update(right.value())
+        left.solve(right.value())
 
 
 def eval_and(left: TreeElem, right: TreeElem) -> Optional[bool]:

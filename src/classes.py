@@ -43,7 +43,7 @@ class Symbol(object):
             self.__value = value
             self.__default = False
         if value != self.__value:
-            raise ValueError('rule incoherence')
+            raise ValueError('rule incoherence: {:s} {} => {}'.format(self.letter, self.__value, value))
 
     def value(self):
         if self.__default:
@@ -147,7 +147,7 @@ class Node(object):
             self.__default = False
         if value != self.__value:
             raise ValueError('rule incoherence')
-        self.solve(self.value())
+        #self.solve(self.value())
 
     def __str__(self):
         elems = self.get_str()
@@ -202,7 +202,10 @@ class Leaf(object):
             self.__default = False
             self.symbol.update(value)
         elif value != self.__value:
-            raise ValueError('rule incoherence')
+            raise ValueError('Error rule confilct')
+
+    def solve(self, res: bool):
+        self.update(self.__invert != res)
 
     def get_str(self):
         return [[('\b!' if self.__invert else '') + str(self)]]

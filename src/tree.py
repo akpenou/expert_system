@@ -15,9 +15,9 @@ logging.basicConfig(level = logging.WARNING)
 # regex = ^\!?[A-Z]([\|\+\^]\!?[A-Z])*<?=>\!?[A-Z]([\|\+\^]\!?[A-Z])*$
 TreeElem = int
 
-def make_update(value: bool, keys: str, symbols):
-    keys = keys.split(' ')
-    for key in keys.strip().split(' '):
+def make_update(value: bool, keys: List[str], symbols):
+    print(keys)
+    for key in keys:
         if key in symbols:
             symbols[key].update(value)
         else:
@@ -80,26 +80,55 @@ def solve(expr_forest: Optional[TreeElem]):
 
 
 def print_forest(expr_forest):
+    """ Print the equation forest. """
     if not expr_forest:
         print('Empty')
         return 
     for tree in expr_forest:
         print(tree)
 
+
 def reset_symbols():
+    """ Reset all the symbols.
+
+    Returns:
+        all the symbols initialized
+    """
     symbols = dict()
     for letter in map(chr, range(ord('A'), ord('Z') + 1)):
         symbols[letter] = Symbol(letter)
+    return symbols
 
 
-def repl(symbols: Symbol):
+def init_forest(filename: str):
+    """ Init the repl.
+
+    Args:
+        filename: name of the file to parse
+
+    Returns:
+        the rules, the expression forest, the values queries
+    """
+    symbols = reset_symbols()
+    equations, init, queries = parse.parse_file(filename)
+    expr_forest = parse.make_tree(equations, symbols)
+    make_update(True, init, symbols)
+    lst_queries = [ symbols[symbol] for symbol in queries ]
+    return equations, expr_forest, lst_queries, symbols
+
+
+def repl(filename: str, interactive: bool = False):
     """ The core function of the repl.
 
     Args:
         symbols: All symbols available
     """
-    rules = list()
-    expr_forest = 0
+    rules, expr_forest, queries, symbols = init_forest(filename)
+    if not interactive:
+        solve(expr_forest)
+        for query in queries:
+            print('{:s} => {}'.format(str(query), query.value()))
+        exit()
     while True:
         print('>>', end = ' ')
         txt_in = input().strip().lower()
@@ -110,23 +139,34 @@ def repl(symbols: Symbol):
             add_rule(txt_in[4:], rules)
         elif txt_in in ['print rules', 'show rules']:
             print_rules(rules)
-        elif txt_in == 'eval':
-            expr_forest = parse.make_tree(rules, symbols)
         elif txt_in == 'solve':
+            expr_forest = parse.make_tree(rules, symbols)
             solve(expr_forest)
-        elif txt_in in ['print res']:
+        elif txt_in in ['print tree', 'show tree']:
             print_forest(expr_forest)
         elif txt_in.startswith('True ') or txt_in.startswith('False '):
             value = txt_in.startswith('True ')
-            make_update(
-        elif txt_in in ['re
+            make_update(value, keys, symbols)
+        elif txt_in in ['reset all']:
+            rules, expr_forest, queries = init_forest(filename)
+        elif txt_in in ['reset symbols']:
+            symbols = reset_symbols()
+        elif txt_in in ['help']:
+            print('reset all|symbols')
+            print('print|show rules')
+            print('print|show tree')
+            print('solve')
         else:
             print('I don\'t understand the command')
 
 
 if __name__ == '__main__':
-    symbols = symbols
-    repl(symbols)
+    if len(sys.argv) not in [2, 3]:
+        print('usage: python3 {:s} file [--interactive]'.format(sys.argv[0]))
+        exit(os.EX_USAGE)
+    filename = sys.argv[1]
+    interactive = '--interactive' in sys.argv
+    repl(filename, interactive)
     # expression = lexer('A + B | C')
     # expression = lexer('A ^ B + C')
     # symbols = dict()
