@@ -85,6 +85,7 @@ def print_forest(expr_forest):
         return 
     for tree in expr_forest:
         print(tree)
+        print('---')
 
 
 def reset_symbols():
@@ -96,6 +97,7 @@ def reset_symbols():
     symbols = dict()
     for letter in map(chr, range(ord('A'), ord('Z') + 1)):
         symbols[letter] = Symbol(letter)
+        print(symbols[letter])
     return symbols
 
 
@@ -150,7 +152,7 @@ def repl(filename: str, interactive: bool = False):
             keys = list(txt_in[6:].replace(' ', '').strip())
             make_update(False, keys, symbols)
         elif txt_in in ['reset all']:
-            rules, expr_forest, queries = init_forest(filename)
+            rules, expr_forest, queries, symbols = init_forest(filename)
         elif txt_in in ['reset symbols']:
             symbols = reset_symbols()
         elif txt_in in ['help']:
