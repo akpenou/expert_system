@@ -1,0 +1,5 @@
+A <=> B <=> C
+B => F | D => F
+C <=> R ^ P => F
+=APD                  # Initial facts : A, B and G are true. All others are false.
+?DCF                   # Queries : What are G, V and X ?

@@ -1,4 +1,4 @@
-from typing import Union, List, Dict, Optional, Type
+from typing import Union, List, Dict, Optional
 from classes import *
 import parse
 import logging

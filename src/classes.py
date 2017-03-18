@@ -1,4 +1,4 @@
-from typing import Union, List, Dict, Optional, Type
+from typing import Union, List, Dict, Optional
 import logging
 import ops
 import os
@@ -151,7 +151,6 @@ class Node(object):
         if value != self.__value:
             print('rule incoherence')
             exit(os.EX_DATAERR)
-        #self.solve(self.value())
 
     def __str__(self):
         elems = self.get_str()
