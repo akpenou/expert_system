@@ -36,6 +36,8 @@ def solve_imply(answer: bool, left: TreeElem, right: TreeElem):
     Returns:
         return the comupation if it's possible esle none
     """
+    if answer:
+        left.solve(True)
     if not left.default() and left.value():
         right.solve(True)
 
@@ -50,13 +52,13 @@ def eval_equ(left: TreeElem, right: TreeElem) -> Optional[bool]:
     Returns:
         return the comupation if it's possible esle none
     """
-    solve_equ(True, left, right)
+    solve_equ(None, left, right)
     if left.default() or right.default():
         return None
     return True
 
 
-def solve_equ(answer: bool, left: TreeElem, right: TreeElem):
+def solve_equ(answer: Optional[bool], left: TreeElem, right: TreeElem):
     """ Solve the equ op.
 
     Args:
@@ -71,6 +73,10 @@ def solve_equ(answer: bool, left: TreeElem, right: TreeElem):
         right.solve(left.value())
     if not right.default():
         left.solve(right.value())
+    if not answer == None:
+        right.solve(answer)
+        left.solve(answer)
+    
 
 
 def eval_and(left: TreeElem, right: TreeElem) -> Optional[bool]:

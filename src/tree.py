@@ -16,8 +16,7 @@ logging.basicConfig(level = logging.WARNING)
 TreeElem = int
 
 def make_update(value: bool, keys: List[str], symbols):
-    print(keys)
-    for key in keys:
+    for key in map(lambda x: x.upper(), keys):
         if key in symbols:
             symbols[key].update(value)
         else:
@@ -144,9 +143,12 @@ def repl(filename: str, interactive: bool = False):
             solve(expr_forest)
         elif txt_in in ['print tree', 'show tree']:
             print_forest(expr_forest)
-        elif txt_in.startswith('True ') or txt_in.startswith('False '):
-            value = txt_in.startswith('True ')
-            make_update(value, keys, symbols)
+        elif txt_in.startswith('true '):
+            keys = list(txt_in[5:].replace(' ', '').strip())
+            make_update(True, keys, symbols)
+        elif txt_in.startswith('false '):
+            keys = list(txt_in[6:].replace(' ', '').strip())
+            make_update(False, keys, symbols)
         elif txt_in in ['reset all']:
             rules, expr_forest, queries = init_forest(filename)
         elif txt_in in ['reset symbols']:
@@ -155,6 +157,9 @@ def repl(filename: str, interactive: bool = False):
             print('reset all|symbols')
             print('print|show rules')
             print('print|show tree')
+            print('add [Rule]')
+            print('True [Symbols]')
+            print('False [Symbols]')
             print('solve')
         else:
             print('I don\'t understand the command')

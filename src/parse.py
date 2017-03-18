@@ -24,7 +24,8 @@ def find_token(tokens: List[str], get: str) -> Optional[int]:
         if token == ')':
             count -= 1
             if count < 0:
-                raise ValueError('Bad Globing')
+                print('Bad Globing')
+                exit(os.EX_DATAERR)
         if token == get and not count:
             return idx
     return None
@@ -42,9 +43,11 @@ def tokenize_wchr(tokens: List[str], get: str):
     """
     idx = tokens.index(get[0])
     if idx + len(get) > len(tokens):
-        raise ValueError('Wrong token')
+        print('Wrong token')
+        exit(os.EX_DATAERR)
     if get != ''.join(tokens[idx:idx + len(get)]):
-        raise ValueError('Wrong token')
+        print('Wrong token')
+        exit(os.EX_DATAERR)
     tokens = tokens[:idx] + [get] + tokens[idx + len(get):]
     return tokens
 
@@ -115,7 +118,8 @@ def parser(tokens: List[str], symbols: Dict[str, object], invert: bool = False):
     if len(tokens) == 1 and tokens[0] in symbols:
         return Leaf(symbols[tokens[0]], invert)
     logging.warning(tokens)
-    raise ValueError('Wrong input rule')
+    print('Wrong input rule')
+    exit(os.EX_DATAERR)
 
 
 def make_tree(expressions: List[str], symbols: Symbol):

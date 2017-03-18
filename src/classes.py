@@ -1,6 +1,7 @@
 from typing import Union, List, Dict, Optional, Type
 import logging
 import ops
+import os
 
 TreeElem = int
 OKGREEN = '\033[92m'
@@ -43,7 +44,9 @@ class Symbol(object):
             self.__value = value
             self.__default = False
         if value != self.__value:
-            raise ValueError('rule incoherence: {:s} {} => {}'.format(self.letter, self.__value, value))
+            print('rule incoherence: {:s} {} => {}'.format(self.letter, self.__value, value))
+            exit(os.EX_DATAERR)
+            
 
     def value(self):
         if self.__default:
@@ -146,7 +149,8 @@ class Node(object):
             self.__value = value
             self.__default = False
         if value != self.__value:
-            raise ValueError('rule incoherence')
+            print('rule incoherence')
+            exit(os.EX_DATAERR)
         #self.solve(self.value())
 
     def __str__(self):
@@ -202,7 +206,8 @@ class Leaf(object):
             self.__default = False
             self.symbol.update(value)
         elif value != self.__value:
-            raise ValueError('Error rule confilct')
+            print('Error rule confilct')
+            exit(os.EX_DATAERR)
 
     def solve(self, res: bool):
         self.update(self.__invert != res)
