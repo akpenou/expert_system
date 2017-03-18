@@ -37,6 +37,7 @@ def solve_imply(answer: bool, left: TreeElem, right: TreeElem):
         return the comupation if it's possible esle none
     """
     if answer:
+        print('imply:', answer)
         left.solve(True)
     if not left.default() and left.value():
         right.solve(True)

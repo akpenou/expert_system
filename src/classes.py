@@ -127,7 +127,7 @@ class Node(object):
         self.left.eval()
         self.right.eval()
         logging.debug('solve')
-        ops[self.op]['solve'](self.__invert != res, self.left, self.right)
+        ops[self.op]['solve'](self.__invert != res if res != None else None, self.left, self.right)
         self.left.eval()
         self.right.eval()
 

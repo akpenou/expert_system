@@ -74,7 +74,7 @@ def solve(expr_forest: Optional[TreeElem]):
     while size != new_size:
         size = new_size
         for tree in expr_forest:
-            tree.solve(True)
+            tree.solve(None)
         new_size = compute_size(expr_forest)
 
 
